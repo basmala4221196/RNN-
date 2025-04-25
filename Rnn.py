@@ -1,6 +1,5 @@
 import numpy as np
 
-# تعريف البيانات: 4 كلمات
 words = ["I", "am", "very", "happy"]
 vocab_size = len(words)  
 hidden_size = 3  
@@ -18,7 +17,7 @@ np.random.seed(42)
 Wx = np.random.randn(hidden_size, vocab_size) * 0.01  
 Wh = np.random.randn(hidden_size, hidden_size) * 0.01 
 Wy = np.random.randn(vocab_size, hidden_size) * 0.01   
-# دالة الـ Forward Propagation (بناءً على صفحة 8 و11)
+
 def forward_propagation(inputs, h_prev):
   
   
@@ -37,7 +36,7 @@ def forward_propagation(inputs, h_prev):
 
 def compute_loss(ys, target):
     target_idx = word_to_index[target]
-    # الـ Loss هي الناقص Log من احتمال الكلمة الصحيحة
+
     loss = -np.log(ys[len(ys)-1][target_idx, 0])
     return loss
 
@@ -51,14 +50,12 @@ def backward_propagation(xs, hs, ats, ys, target):
     dy[target_idx] -= 1 
     
     for t in reversed(range(len(xs))):
-        # Gradient لـ W_y
+        
         dWy += np.dot(dy, hs[t].T) 
         
-        # Gradient للحالة المخفية
         dh = np.dot(Wy.T, dy) + dh_next  
         dh_raw = (1 - hs[t] * hs[t]) * dh  
         
-        # Gradient لـ W_x و W_h
         dWx += np.dot(dh_raw, xs[t].T) 
         if t > 0:
             dWh += np.dot(dh_raw, hs[t-1].T)  
